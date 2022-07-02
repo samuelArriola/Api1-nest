@@ -21,9 +21,8 @@ export class UserService {
   async findAll(): Promise<User[]> {
     //contar resultados
     return await this.userRepository.find({
-      where: {
-        activo: true
-      }
+      where: { activo: true },
+      relations: ['telefonos']
     });  
   }
 
@@ -35,7 +34,7 @@ export class UserService {
       } 
     });
 
-    if(user == null) throw `User ${id} don't found`;
+    if(user == null) throw new NotFoundException(`User ${id} don't found`);
     return user;
   }
 
@@ -46,7 +45,7 @@ export class UserService {
       }
     });
 
-    if (user == null) throw `Id ${id} no encontrado`;
+    if (user == null) throw new NotFoundException(`Id ${id} no encontrado`);
     user.nombre = updateUserDto.nombre;
     user.apellido = updateUserDto.apellido;
     user.telefono = updateUserDto.telefono;
@@ -61,7 +60,7 @@ export class UserService {
        }
      });
 
-     if( user == null) throw 'Usuario ya eliminado';
+     if( user == null) throw new NotFoundException('Usuario ya eliminado');
      user.activo = false;
      return this.userRepository.save(user);
   }

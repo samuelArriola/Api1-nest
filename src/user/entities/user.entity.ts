@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { TelefonoEntity } from "./telefono.entity";
 
 @Entity()
 export class User {
@@ -12,9 +13,14 @@ export class User {
     apellido: string;
 
     @Column()
-    telefono: string
+    telefono: string;
+
+    @OneToMany( () => TelefonoEntity, (telefonos) => telefonos.user)
+    telefonos: TelefonoEntity[];
 
     @Column({default: true})
     activo: boolean
+
+
 
 }
